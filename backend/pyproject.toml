@@ -12,9 +12,11 @@ dependencies = [
     "pydantic>=2.9",
     "pydantic-settings>=2.6",
 
-    # LLM + embeddings
+    # LLM
     "anthropic>=0.40",
-    "openai>=1.54",
+
+    # Embeddings (local, CPU)
+    "sentence-transformers>=3.3",
 
     # Vector store
     "chromadb>=0.5",

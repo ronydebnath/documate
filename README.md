@@ -16,7 +16,7 @@ Scope: single-tenant, read-only corpus ([Fair Work Australia](https://www.fairwo
 
 > _Architecture diagram placeholder — export from Excalidraw to `docs/diagrams/architecture.png`._
 
-1. **Ingest:** HTML docs → normalized → chunked (recursive, 500 tok / 50 overlap) → embedded (`text-embedding-3-small`) → ChromaDB.
+1. **Ingest:** HTML docs → normalized → chunked (recursive, 500 tok / 50 overlap) → embedded locally (`BAAI/bge-small-en-v1.5` via sentence-transformers, runs on CPU) → ChromaDB.
 2. **Retrieve:** top-k cosine search; optional cross-encoder reranking (see eval results).
 3. **Generate:** Claude Sonnet answers with retrieved context. Prompt enforces *"answer only from context or say you don't know"* and cites chunk IDs.
 4. **UI:** Next.js chat. Citations are clickable chips that scroll to the source chunk.
@@ -25,7 +25,7 @@ Scope: single-tenant, read-only corpus ([Fair Work Australia](https://www.fairwo
 
 ```bash
 # Prereqs: Python 3.11+, Node 20+, uv, pnpm
-cp .env.example .env   # fill in ANTHROPIC_API_KEY, OPENAI_API_KEY
+cp .env.example .env   # fill in ANTHROPIC_API_KEY
 
 make install           # uv sync + pnpm install
 make ingest            # loads data/raw/ → data/chroma/
@@ -68,7 +68,7 @@ Full methodology, judge prompt, and per-category breakdown in [docs/evals.md](do
 
 ## Stack
 
-Python · FastAPI · ChromaDB · Anthropic SDK · OpenAI embeddings · Next.js · Tailwind · Fly.io · Vercel
+Python · FastAPI · ChromaDB · Anthropic SDK · sentence-transformers (local embeddings) · Next.js · Tailwind · Fly.io · Vercel
 
 ## License
 
