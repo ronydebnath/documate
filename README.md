@@ -1,0 +1,75 @@
+# DocuMate
+
+An internal knowledge assistant that answers employee questions over company docs, with inline citations. Built end-to-end: ingestion pipeline → vector retrieval → Claude → Next.js chat UI, plus a custom evaluation framework.
+
+**[Live demo](#)** · **[Architecture](docs/architecture.md)** · **[Evals](docs/evals.md)**
+
+> _Screenshot / GIF placeholder — replace with `docs/diagrams/demo.gif` once the UI is running._
+
+## Why
+
+Employees waste hours hunting for answers that already exist in policy docs, runbooks, and onboarding wikis. DocuMate is a thin, focused RAG app that demonstrates a production shape for this problem — not a demo notebook.
+
+Scope: single-tenant, read-only corpus ([Fair Work Australia](https://www.fairwork.gov.au/)), answers with inline citations, and a repeatable eval framework so retrieval/generation changes can be measured.
+
+## How it works
+
+> _Architecture diagram placeholder — export from Excalidraw to `docs/diagrams/architecture.png`._
+
+1. **Ingest:** HTML docs → normalized → chunked (recursive, 500 tok / 50 overlap) → embedded (`text-embedding-3-small`) → ChromaDB.
+2. **Retrieve:** top-k cosine search; optional cross-encoder reranking (see eval results).
+3. **Generate:** Claude Sonnet answers with retrieved context. Prompt enforces *"answer only from context or say you don't know"* and cites chunk IDs.
+4. **UI:** Next.js chat. Citations are clickable chips that scroll to the source chunk.
+
+## Quickstart
+
+```bash
+# Prereqs: Python 3.11+, Node 20+, uv, pnpm
+cp .env.example .env   # fill in ANTHROPIC_API_KEY, OPENAI_API_KEY
+
+make install           # uv sync + pnpm install
+make ingest            # loads data/raw/ → data/chroma/
+make dev               # FastAPI on :8000, Next.js on :3000
+make eval              # runs the baseline eval config
+```
+
+## Evaluation
+
+Custom eval framework measuring retrieval quality and answer faithfulness against a hand-crafted dataset of ~30 Q&A pairs across 6 categories (factual lookup, multi-hop, aggregation, negation, out-of-scope, ambiguous).
+
+| Config               | Hit@5 | MRR  | Faithfulness | Citation Acc. |
+|----------------------|-------|------|--------------|---------------|
+| Baseline             | _TBD_ | _TBD_| _TBD_        | _TBD_         |
+| + Cross-enc. rerank  | _TBD_ | _TBD_| _TBD_        | _TBD_         |
+
+Full methodology, judge prompt, and per-category breakdown in [docs/evals.md](docs/evals.md).
+
+## Engineering decisions
+
+- **No LangChain** — direct SDK calls keep the surface area small and auditable ([ADR-0001](docs/decisions/0001-no-langchain.md)).
+- **Chroma over Qdrant/pgvector** — zero-infra file-backed store is right for this scope; swap is ~50 LoC behind the retriever interface.
+- **Embedder / generator / retriever as separate services** — each is one function; makes experiments (reranking, hybrid search, query rewriting) a small diff.
+- **Judge model ≠ generator model** where possible, to reduce LLM-as-judge bias.
+
+## Limitations
+
+- Single corpus, no per-document ACLs.
+- No incremental ingestion — full rebuild on doc changes.
+- Evaluated on ~30 hand-crafted pairs; not a statistically robust benchmark.
+- No streaming responses in the current UI.
+
+## What I'd do next
+
+- Hybrid retrieval (BM25 + vector) with fusion ranking.
+- Query decomposition for multi-hop questions.
+- Structured refusal: return `{"answer": null, "reason": "..."}` when retrieval confidence is below threshold.
+- Incremental ingestion keyed on doc hash.
+- Expand eval set to 150+ pairs and measure inter-rater agreement on a sample.
+
+## Stack
+
+Python · FastAPI · ChromaDB · Anthropic SDK · OpenAI embeddings · Next.js · Tailwind · Fly.io · Vercel
+
+## License
+
+MIT — see [LICENSE](LICENSE).

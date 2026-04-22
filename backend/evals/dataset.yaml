@@ -1,0 +1,67 @@
+# DocuMate evaluation dataset
+#
+# Schema (see docs/evals.md for full methodology):
+#
+#   id:                  stable ID; prefix by corpus area (fw- = fairwork)
+#   category:            factual_lookup | multi_hop | aggregation | negation | out_of_scope | ambiguous
+#   difficulty:          easy | medium | hard
+#   question:            the user-facing question, written as an employee might phrase it
+#   reference_answer:    1-3 sentence gold paraphrase; NOT a doc copy-paste
+#   expected_source_ids: list of source chunk/doc IDs that SHOULD appear in retrieval (drives precision@k, recall@k, MRR)
+#   must_contain:        substrings that MUST appear in a correct answer (cheap deterministic guard)
+#   must_not_contain:    substrings whose presence indicates hallucination or contamination
+#   notes:               why this item exists / what failure mode it guards against
+#
+# Seed: 3 entries covering 3 categories. Expand to ~30 across all 6 categories on Day 5.
+
+- id: fw-notice-001
+  category: factual_lookup
+  difficulty: easy
+  question: "What is the minimum notice period when resigning in Australia?"
+  reference_answer: >
+    The minimum notice period depends on the employee's continuous service:
+    1 week if under 1 year, 2 weeks for 1-3 years, 3 weeks for 3-5 years,
+    and 4 weeks for over 5 years. Employees over 45 with at least 2 years
+    of service receive an additional week.
+  expected_source_ids:
+    - fairwork/notice-of-termination-and-redundancy-pay
+  must_contain:
+    - "1 week"
+    - "4 weeks"
+  must_not_contain: []
+  notes: "Single-chunk factual lookup. If hit@5 fails here, retrieval is broken at baseline."
+
+- id: fw-leave-002
+  category: multi_hop
+  difficulty: medium
+  question: "Can I take paid parental leave and carer's leave in the same year?"
+  reference_answer: >
+    Yes. Paid parental leave and personal/carer's leave are separate
+    entitlements under the National Employment Standards and can both
+    be used in the same year, subject to each scheme's own eligibility
+    rules and notice requirements.
+  expected_source_ids:
+    - fairwork/parental-leave
+    - fairwork/sick-and-carers-leave
+  must_contain:
+    - "yes"
+  must_not_contain:
+    - "cannot"
+    - "not allowed"
+  notes: "Requires combining two separate leave-type pages; probes multi-chunk retrieval and synthesis."
+
+- id: oos-weather-001
+  category: out_of_scope
+  difficulty: easy
+  question: "What's the weather in Sydney today?"
+  reference_answer: >
+    I don't know. This question isn't covered by the documents available
+    to me; please check a weather service.
+  expected_source_ids: []
+  must_contain:
+    - "don't know"
+  must_not_contain:
+    - "sunny"
+    - "rain"
+    - "degrees"
+  notes: "Refusal test. System must decline cleanly instead of hallucinating weather data."
