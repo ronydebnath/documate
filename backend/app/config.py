@@ -10,7 +10,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -55,6 +55,20 @@ class Settings(BaseSettings):
     cors_allowed_origins: str = Field(
         default="http://localhost:3000", alias="CORS_ALLOWED_ORIGINS"
     )
+
+    @field_validator("chroma_persist_dir")
+    @classmethod
+    def _anchor_chroma_path(cls, v: str) -> str:
+        """Resolve relative paths against REPO_ROOT so the value is cwd-independent.
+
+        .env can store './data/chroma' for readability; we always work with
+        an absolute path internally so the FastAPI app, ingest CLI, and
+        notebooks all hit the same store regardless of where they're launched.
+        """
+        p = Path(v)
+        if not p.is_absolute():
+            p = (REPO_ROOT / p).resolve()
+        return str(p)
 
 
 @lru_cache(maxsize=1)
