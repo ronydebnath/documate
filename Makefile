@@ -15,7 +15,10 @@ re-extract:
 	cd backend && uv run python -m scripts.extract --slug $(SLUG)
 
 ingest:
-	cd backend && uv run python -m ingest
+	cd backend && uv run python -m ingest --rebuild
+
+verify-ingest:
+	cd backend && uv run python -m scripts.verify_ingest
 
 # --- Dev (run backend and frontend in two terminals) ---
 
