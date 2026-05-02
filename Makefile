@@ -1,4 +1,4 @@
-.PHONY: install ingest dev backend frontend eval eval-rerank test fmt lint clean
+.PHONY: install scrape re-extract ingest dev backend frontend eval eval-rerank test fmt lint clean
 
 # --- Setup ---
 
@@ -7,6 +7,12 @@ install:
 	cd frontend && pnpm install
 
 # --- Data ---
+
+scrape:
+	cd backend && uv run python -m scripts.scrape
+
+re-extract:
+	cd backend && uv run python -m scripts.extract --slug $(SLUG)
 
 ingest:
 	cd backend && uv run python -m ingest

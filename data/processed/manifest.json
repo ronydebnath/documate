@@ -1,0 +1,542 @@
+[
+  {
+    "slug": "employment-conditions-awards",
+    "url": "https://www.fairwork.gov.au/employment-conditions/awards",
+    "title": "Awards",
+    "scraped_at": "2026-05-02T01:21:58.835842+00:00",
+    "section": "awards",
+    "char_count": 899,
+    "sha256": "1afa233385d0c9da12cbf2cdbf5e39f8b38f1c9529a5b9d7d75343c0a416eb90"
+  },
+  {
+    "slug": "employment-conditions",
+    "url": "https://www.fairwork.gov.au/employment-conditions",
+    "title": "Employment conditions",
+    "scraped_at": "2026-05-02T01:21:57.932786+00:00",
+    "section": "employment-conditions",
+    "char_count": 2187,
+    "sha256": "53d973d1bc114c9d5adb464c513171d2e2622a9a860899a8dfb3e4f8390cce5d"
+  },
+  {
+    "slug": "employment-conditions-agreements",
+    "url": "https://www.fairwork.gov.au/employment-conditions/agreements",
+    "title": "Agreements",
+    "scraped_at": "2026-05-02T01:21:59.869636+00:00",
+    "section": "employment-conditions",
+    "char_count": 696,
+    "sha256": "58e1695d56b06cf2cbb2995435aa06b699e5c4b36202bd2c6f4afbf8164297b7"
+  },
+  {
+    "slug": "employment-conditions-bullying-sexual-harassment-and-discrimination-at-work",
+    "url": "https://www.fairwork.gov.au/employment-conditions/bullying-sexual-harassment-and-discrimination-at-work",
+    "title": "Bullying, sexual harassment and discrimination at work",
+    "scraped_at": "2026-05-02T01:22:09.892871+00:00",
+    "section": "employment-conditions",
+    "char_count": 1684,
+    "sha256": "8851a8b102c097893514b8c835c8e3697fb5f89aae9e940e913bf9d04c0b8d59"
+  },
+  {
+    "slug": "employment-conditions-employment-contracts",
+    "url": "https://www.fairwork.gov.au/employment-conditions/employment-contracts",
+    "title": "Employment contracts",
+    "scraped_at": "2026-05-02T01:22:02.937785+00:00",
+    "section": "employment-conditions",
+    "char_count": 707,
+    "sha256": "3e86e726c10f8c0b29b746b559c020fe16749a4adea10012e3273ded43271961"
+  },
+  {
+    "slug": "employment-conditions-flexibility-in-the-workplace",
+    "url": "https://www.fairwork.gov.au/employment-conditions/flexibility-in-the-workplace",
+    "title": "Flexibility in the workplace",
+    "scraped_at": "2026-05-02T01:22:05.044099+00:00",
+    "section": "employment-conditions",
+    "char_count": 3508,
+    "sha256": "7718b715d064aaf55bc024a90997ae3a51c6c81a73d2c8666218e5ecfdcb2c73"
+  },
+  {
+    "slug": "employment-conditions-hours-of-work-breaks-and-rosters",
+    "url": "https://www.fairwork.gov.au/employment-conditions/hours-of-work-breaks-and-rosters",
+    "title": "Hours of work, breaks and rosters",
+    "scraped_at": "2026-05-02T01:22:03.952751+00:00",
+    "section": "employment-conditions",
+    "char_count": 3350,
+    "sha256": "69d1166289df38581cdfb1807ba860d61311a30c421a3793f160a7ea9baa7d2f"
+  },
+  {
+    "slug": "employment-conditions-information-statements",
+    "url": "https://www.fairwork.gov.au/employment-conditions/information-statements",
+    "title": "Information statements",
+    "scraped_at": "2026-05-02T01:22:00.883090+00:00",
+    "section": "employment-conditions",
+    "char_count": 977,
+    "sha256": "b9fcb70278b2b14feb185b157c6440944c281a2606b4674c0910b122844558fa"
+  },
+  {
+    "slug": "employment-conditions-national-employment-standards",
+    "url": "https://www.fairwork.gov.au/employment-conditions/national-employment-standards",
+    "title": "National Employment Standards",
+    "scraped_at": "2026-05-02T01:22:01.884135+00:00",
+    "section": "employment-conditions",
+    "char_count": 4561,
+    "sha256": "9b6774aaee54795fc44684dfcfb6a8287f9217dec1f00b6711e19e249d5f819a"
+  },
+  {
+    "slug": "employment-conditions-performance-in-the-workplace",
+    "url": "https://www.fairwork.gov.au/employment-conditions/performance-in-the-workplace",
+    "title": "Managing performance and warnings",
+    "scraped_at": "2026-05-02T01:22:05.921840+00:00",
+    "section": "employment-conditions",
+    "char_count": 7165,
+    "sha256": "649812b0a207248259c7feadb322f50ee03e565e1159b90d2cd8f42387fb6156"
+  },
+  {
+    "slug": "employment-conditions-protections-at-work",
+    "url": "https://www.fairwork.gov.au/employment-conditions/protections-at-work",
+    "title": "Protections at work",
+    "scraped_at": "2026-05-02T01:22:08.030152+00:00",
+    "section": "employment-conditions",
+    "char_count": 11403,
+    "sha256": "5f883ef08a2eaf18c9497d69ca1fdb22d5dd490c851bd365dc706c248a3f5c24"
+  },
+  {
+    "slug": "employment-conditions-public-holidays",
+    "url": "https://www.fairwork.gov.au/employment-conditions/public-holidays",
+    "title": "Public holidays",
+    "scraped_at": "2026-05-02T01:21:39.805847+00:00",
+    "section": "employment-conditions",
+    "char_count": 5323,
+    "sha256": "08650e7f12bb6ccd184ed4138ba173050097b2e7ee2959a050609f43be110b8b"
+  },
+  {
+    "slug": "employment-conditions-representational-rights-and-responsibilities-in-the-workplace",
+    "url": "https://www.fairwork.gov.au/employment-conditions/representational-rights-and-responsibilities-in-the-workplace",
+    "title": "Representational rights and responsibilities in the workplace",
+    "scraped_at": "2026-05-02T01:22:06.990523+00:00",
+    "section": "employment-conditions",
+    "char_count": 1645,
+    "sha256": "27d6ba812e70870e9614f3ef12f9246762f738a5926ca88826e17fb5c0aab29c"
+  },
+  {
+    "slug": "employment-conditions-when-businesses-change-owners",
+    "url": "https://www.fairwork.gov.au/employment-conditions/when-businesses-change-owners",
+    "title": "When businesses change owners",
+    "scraped_at": "2026-05-02T01:22:08.916779+00:00",
+    "section": "employment-conditions",
+    "char_count": 2991,
+    "sha256": "b1c26f8e490ae2c4b21f50f625a0072cbadd37c3855d9e13e6c74db19e356d84"
+  },
+  {
+    "slug": "employment-conditions-workers-compensation",
+    "url": "https://www.fairwork.gov.au/employment-conditions/workers-compensation",
+    "title": "Workers compensation",
+    "scraped_at": "2026-05-02T01:22:10.932045+00:00",
+    "section": "employment-conditions",
+    "char_count": 1423,
+    "sha256": "8ec153464e7c72c6c88f47297ccc547fbd77f4c061fdb7fa664bad8a52f60069"
+  },
+  {
+    "slug": "starting-employment",
+    "url": "https://www.fairwork.gov.au/starting-employment",
+    "title": "Starting employment",
+    "scraped_at": "2026-05-02T01:21:48.841095+00:00",
+    "section": "employment-conditions",
+    "char_count": 1380,
+    "sha256": "c59095a07b1d5e13136d66a82fef568225f9b1e59cebf4db82550066d4f66136"
+  },
+  {
+    "slug": "starting-employment-before-starting-employment",
+    "url": "https://www.fairwork.gov.au/starting-employment/before-starting-employment",
+    "title": "Before starting employment",
+    "scraped_at": "2026-05-02T01:21:51.824677+00:00",
+    "section": "employment-conditions",
+    "char_count": 8991,
+    "sha256": "3e76f52985d4f2d388660eb16da32e7bd2877c95e39546a69654c6906cd7021f"
+  },
+  {
+    "slug": "starting-employment-hiring-employees",
+    "url": "https://www.fairwork.gov.au/starting-employment/hiring-employees",
+    "title": "Hiring employees",
+    "scraped_at": "2026-05-02T01:21:49.815532+00:00",
+    "section": "employment-conditions",
+    "char_count": 6040,
+    "sha256": "7c86e5996e1b164f13edacb23c383115542a644d68b904683db2df88bed91ad1"
+  },
+  {
+    "slug": "starting-employment-job-ads",
+    "url": "https://www.fairwork.gov.au/starting-employment/job-ads",
+    "title": "Job ads",
+    "scraped_at": "2026-05-02T01:21:50.808935+00:00",
+    "section": "employment-conditions",
+    "char_count": 3565,
+    "sha256": "fc5b05d22a9e20868239e12df8aa5c8781e524551f1dc8db1ad69e075d989302"
+  },
+  {
+    "slug": "starting-employment-probation",
+    "url": "https://www.fairwork.gov.au/starting-employment/probation",
+    "title": "Probation",
+    "scraped_at": "2026-05-02T01:21:52.835887+00:00",
+    "section": "employment-conditions",
+    "char_count": 1698,
+    "sha256": "aff470de535004250536937cb739364e8f3a032cea2e37cfdf7129a7d713e97d"
+  },
+  {
+    "slug": "starting-employment-unpaid-work",
+    "url": "https://www.fairwork.gov.au/starting-employment/unpaid-work",
+    "title": "Unpaid work",
+    "scraped_at": "2026-05-02T01:21:56.871374+00:00",
+    "section": "employment-conditions",
+    "char_count": 2088,
+    "sha256": "f164922aa4333da9b073b355f3c78d553527f51e15f08c6c4ef2d5b054701864"
+  },
+  {
+    "slug": "workplace-problems-common-workplace-problems",
+    "url": "https://www.fairwork.gov.au/workplace-problems/common-workplace-problems",
+    "title": "Common workplace problems",
+    "scraped_at": "2026-05-02T01:22:18.902776+00:00",
+    "section": "employment-conditions",
+    "char_count": 1544,
+    "sha256": "6747649dfaffb2fb64612cc26c27b4c96c20a5541582b4164a1552a7b879b0f5"
+  },
+  {
+    "slug": "workplace-problems-fixing-a-workplace-problem",
+    "url": "https://www.fairwork.gov.au/workplace-problems/fixing-a-workplace-problem",
+    "title": "Fixing a workplace problem",
+    "scraped_at": "2026-05-02T01:22:20.041093+00:00",
+    "section": "employment-conditions",
+    "char_count": 867,
+    "sha256": "ebc21c6f6a2e56c629325bfb0571c8280552e18badcb9923ee48734c1b08ae62"
+  },
+  {
+    "slug": "workplace-problems-preventing-workplace-problems",
+    "url": "https://www.fairwork.gov.au/workplace-problems/preventing-workplace-problems",
+    "title": "Preventing workplace problems",
+    "scraped_at": "2026-05-02T01:22:17.918905+00:00",
+    "section": "employment-conditions",
+    "char_count": 7428,
+    "sha256": "f3fbe225aa49d28ebc101d9a38d03237d7c5dfbf64a730292374c6e53e297c08"
+  },
+  {
+    "slug": "workplace-problems-send-us-an-anonymous-tip-off",
+    "url": "https://www.fairwork.gov.au/workplace-problems/send-us-an-anonymous-tip-off",
+    "title": "Send us an anonymous tip-off",
+    "scraped_at": "2026-05-02T01:22:20.971934+00:00",
+    "section": "employment-conditions",
+    "char_count": 3282,
+    "sha256": "4bf548462655e4533c334b6bf3f0f4010c602942d3811231442650ea23fc7aa1"
+  },
+  {
+    "slug": "ending-employment",
+    "url": "https://www.fairwork.gov.au/ending-employment",
+    "title": "Ending employment",
+    "scraped_at": "2026-05-02T01:21:53.895112+00:00",
+    "section": "ending-employment",
+    "char_count": 1479,
+    "sha256": "bea5b9565f7e5ba95992e62f9089744a25e7f64e8db1315989a6d697134c5119"
+  },
+  {
+    "slug": "ending-employment-dismissal",
+    "url": "https://www.fairwork.gov.au/ending-employment/dismissal",
+    "title": "Dismissal",
+    "scraped_at": "2026-05-02T01:22:11.885878+00:00",
+    "section": "ending-employment",
+    "char_count": 11919,
+    "sha256": "0c055d3270017ceff1012a06f8dfefb9ccba1151077e257b8991b4b58197f408"
+  },
+  {
+    "slug": "ending-employment-final-pay",
+    "url": "https://www.fairwork.gov.au/ending-employment/final-pay",
+    "title": "Final pay",
+    "scraped_at": "2026-05-02T01:22:14.895568+00:00",
+    "section": "ending-employment",
+    "char_count": 4084,
+    "sha256": "28618100d0bf30482448f3b93bbd9c75ba1ef2e1c8a43bbd5ca0632a122a072e"
+  },
+  {
+    "slug": "ending-employment-help-with-termination",
+    "url": "https://www.fairwork.gov.au/ending-employment/help-with-termination",
+    "title": "Help with termination",
+    "scraped_at": "2026-05-02T01:22:15.897590+00:00",
+    "section": "ending-employment",
+    "char_count": 2073,
+    "sha256": "ad5592c778b5ce5b83e3a5387d36364a9a8b987fce365820d4f7d9c6761c0226"
+  },
+  {
+    "slug": "ending-employment-redundancy",
+    "url": "https://www.fairwork.gov.au/ending-employment/redundancy",
+    "title": "Redundancy",
+    "scraped_at": "2026-05-02T01:22:13.882300+00:00",
+    "section": "ending-employment",
+    "char_count": 4992,
+    "sha256": "0781afcf9368ef9a33fed208e93ba72f1d0ac95121aa46f82d67a0e8b056e53b"
+  },
+  {
+    "slug": "ending-employment-resignation",
+    "url": "https://www.fairwork.gov.au/ending-employment/resignation",
+    "title": "Resignation",
+    "scraped_at": "2026-05-02T01:22:12.935710+00:00",
+    "section": "ending-employment",
+    "char_count": 5587,
+    "sha256": "061cd6d7ec4ba1512355c199c7d85dea9c43053312888fa2745c9c4e0fa44d8a"
+  },
+  {
+    "slug": "leave",
+    "url": "https://www.fairwork.gov.au/leave",
+    "title": "Leave",
+    "scraped_at": "2026-05-02T01:21:38.829160+00:00",
+    "section": "leave",
+    "char_count": 1411,
+    "sha256": "f4c49ab27376082286b4178c120220909560b8d95ba6fccb3cd1f5e2096db269"
+  },
+  {
+    "slug": "leave-annual-leave",
+    "url": "https://www.fairwork.gov.au/leave/annual-leave",
+    "title": "Annual leave",
+    "scraped_at": "2026-05-02T01:21:40.798534+00:00",
+    "section": "leave",
+    "char_count": 3008,
+    "sha256": "35638641fc6b3416eba55f3241fdc93018a78b7f5a0d3ba6f79dd740d17f2dc1"
+  },
+  {
+    "slug": "leave-community-service-leave",
+    "url": "https://www.fairwork.gov.au/leave/community-service-leave",
+    "title": "Community service leave",
+    "scraped_at": "2026-05-02T01:21:46.890696+00:00",
+    "section": "leave",
+    "char_count": 2818,
+    "sha256": "72a95c5ae28eb7739cbd04bb1a1aa3bbd49472b29bb2517c9dfd434039d7db5d"
+  },
+  {
+    "slug": "leave-compassionate-and-bereavement-leave",
+    "url": "https://www.fairwork.gov.au/leave/compassionate-and-bereavement-leave",
+    "title": "Compassionate and bereavement leave",
+    "scraped_at": "2026-05-02T01:21:43.025766+00:00",
+    "section": "leave",
+    "char_count": 3896,
+    "sha256": "cd9fa0354f79a02d836aab6293b1d77a422b86237310cfff7a86553fb9ae8620"
+  },
+  {
+    "slug": "leave-family-and-domestic-violence-leave",
+    "url": "https://www.fairwork.gov.au/leave/family-and-domestic-violence-leave",
+    "title": "Family and domestic violence leave",
+    "scraped_at": "2026-05-02T01:21:44.975864+00:00",
+    "section": "leave",
+    "char_count": 6914,
+    "sha256": "21b69bc04a9eb4304b8da8e8e48b849d356f2ece290e0d18c0db0a9c9db0670f"
+  },
+  {
+    "slug": "leave-long-service-leave",
+    "url": "https://www.fairwork.gov.au/leave/long-service-leave",
+    "title": "Long service leave",
+    "scraped_at": "2026-05-02T01:21:45.880792+00:00",
+    "section": "leave",
+    "char_count": 5790,
+    "sha256": "e03f5c46a3c5798f1113d37390555887ade50c365dccbaf0af34eb87c6807a6f"
+  },
+  {
+    "slug": "leave-parental-leave",
+    "url": "https://www.fairwork.gov.au/leave/parental-leave",
+    "title": "Parental leave",
+    "scraped_at": "2026-05-02T01:21:43.828482+00:00",
+    "section": "leave",
+    "char_count": 875,
+    "sha256": "b19910388ad2f752e8e96dfe34aef429f9b1e7099bd8cffee2aefde65b970eb4"
+  },
+  {
+    "slug": "leave-sick-and-carers-leave",
+    "url": "https://www.fairwork.gov.au/leave/sick-and-carers-leave",
+    "title": "Sick and carer's leave",
+    "scraped_at": "2026-05-02T01:21:41.792413+00:00",
+    "section": "leave",
+    "char_count": 3930,
+    "sha256": "9a96d4f46ddf92b075d3f4eb66a06d448a2c2d8bbc1061e88b68ae9fa6929fb0"
+  },
+  {
+    "slug": "leave-unpaid-leave",
+    "url": "https://www.fairwork.gov.au/leave/unpaid-leave",
+    "title": "Unpaid leave",
+    "scraped_at": "2026-05-02T01:21:47.936435+00:00",
+    "section": "leave",
+    "char_count": 4286,
+    "sha256": "3ad76c5ec87574512dc42e66255ca155756139a70ac187ae3a5bfcd309ab7c0a"
+  },
+  {
+    "slug": "pay-and-wages",
+    "url": "https://www.fairwork.gov.au/pay-and-wages",
+    "title": "Pay and wages",
+    "scraped_at": "2026-05-02T01:21:28.996884+00:00",
+    "section": "pay-and-wages",
+    "char_count": 1591,
+    "sha256": "3223da27fb2b8ecd1cb587e9c8cb915685ef4a1693223e6163ffbd039272fb14"
+  },
+  {
+    "slug": "pay-and-wages-allowances-penalty-rates-and-other-penalties",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/allowances-penalty-rates-and-other-penalties",
+    "title": "Allowances, penalty rates and other payments",
+    "scraped_at": "2026-05-02T01:21:30.770205+00:00",
+    "section": "pay-and-wages",
+    "char_count": 2168,
+    "sha256": "72ed80bbe2fe1942fa85dd001f0e4d4e5ac258ef290595c3d54504fd9466aa77"
+  },
+  {
+    "slug": "pay-and-wages-daylight-saving-time",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/daylight-saving-time",
+    "title": "Daylight saving time",
+    "scraped_at": "2026-05-02T01:21:36.763259+00:00",
+    "section": "pay-and-wages",
+    "char_count": 2761,
+    "sha256": "1e2db80e73bb0cd56b02b17696b83d7f138549a83f29fff07a45722b4ff646bb"
+  },
+  {
+    "slug": "pay-and-wages-deductions-and-related-issues",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/deductions-and-related-issues",
+    "title": "Deductions and related issues",
+    "scraped_at": "2026-05-02T01:21:33.818581+00:00",
+    "section": "pay-and-wages",
+    "char_count": 1165,
+    "sha256": "509c3f84e353ac8e1fcc9bbd0fce08ee99a1a7880769335f0f84478110ad952e"
+  },
+  {
+    "slug": "pay-and-wages-minimum-wages",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/minimum-wages",
+    "title": "Minimum wages",
+    "scraped_at": "2026-05-02T01:21:29.757595+00:00",
+    "section": "pay-and-wages",
+    "char_count": 4332,
+    "sha256": "b6d01d229231b8785e777f16af14b9ec532b8b43e7dab225c3050ae8803f1a6f"
+  },
+  {
+    "slug": "pay-and-wages-pay-during-inclement-or-severe-weather-natural-disasters",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/pay-during-inclement-or-severe-weather-natural-disasters",
+    "title": "Pay during inclement or severe weather and natural disasters",
+    "scraped_at": "2026-05-02T01:21:35.753194+00:00",
+    "section": "pay-and-wages",
+    "char_count": 6285,
+    "sha256": "d554cda9ee4ce9966eb71584fde06e1fba7dea3104440b65c2269142633286a6"
+  },
+  {
+    "slug": "pay-and-wages-pay-secrecy",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/pay-secrecy",
+    "title": "Pay secrecy",
+    "scraped_at": "2026-05-02T01:21:32.881965+00:00",
+    "section": "pay-and-wages",
+    "char_count": 10198,
+    "sha256": "ab72b30f3e188f9f2b8a73ca3b3ce1daa8371a68652405fa8989e2c71ca4e938"
+  },
+  {
+    "slug": "pay-and-wages-paying-wages",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/paying-wages",
+    "title": "Paying wages",
+    "scraped_at": "2026-05-02T01:21:31.765026+00:00",
+    "section": "pay-and-wages",
+    "char_count": 3044,
+    "sha256": "98ab602bc12da8bfc9bdc52ccec6a98a7f3d9d53679a4c08d72160ca31ed668f"
+  },
+  {
+    "slug": "pay-and-wages-stand-downs",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/stand-downs",
+    "title": "Stand downs",
+    "scraped_at": "2026-05-02T01:21:34.750679+00:00",
+    "section": "pay-and-wages",
+    "char_count": 8079,
+    "sha256": "e32def853f0e71ac6e7fa59e20271b4a7b7e9c3d17d77cf8ea5b1850598e44e5"
+  },
+  {
+    "slug": "pay-and-wages-tax-and-superannuation",
+    "url": "https://www.fairwork.gov.au/pay-and-wages/tax-and-superannuation",
+    "title": "Tax and superannuation",
+    "scraped_at": "2026-05-02T01:21:38.459853+00:00",
+    "section": "pay-and-wages",
+    "char_count": 5270,
+    "sha256": "482733545a32244bd1e701cf5fde6d268a9201d17eb686f92ba7a2f67279fbf5"
+  },
+  {
+    "slug": "sb-employer-advisory-service",
+    "url": "https://smallbusiness.fairwork.gov.au/employer-advisory-service",
+    "title": "Employer Advisory Service",
+    "scraped_at": "2026-05-02T01:22:30.969460+00:00",
+    "section": "small-business",
+    "char_count": 3710,
+    "sha256": "e351de223dc657cec7c065a4b8adda09961c570717ea213cb3cbc0360f7c024b"
+  },
+  {
+    "slug": "sb-ending-employment",
+    "url": "https://smallbusiness.fairwork.gov.au/ending-employment",
+    "title": "Ending employment",
+    "scraped_at": "2026-05-02T01:22:29.962301+00:00",
+    "section": "small-business",
+    "char_count": 7523,
+    "sha256": "836b97adbe83db3fe4504ef4b1d06fd52fd81924513232d05d43d9fe90a1f57d"
+  },
+  {
+    "slug": "sb-flexible-work-and-permanent-employment-requests",
+    "url": "https://smallbusiness.fairwork.gov.au/flexible-work-and-permanent-employment-requests",
+    "title": "Flexible work and permanent employment requests",
+    "scraped_at": "2026-05-02T01:22:28.986686+00:00",
+    "section": "small-business",
+    "char_count": 7594,
+    "sha256": "5f432ff3aa513c9bdd6fa0cce300280b17e0afb2da19c44538d7460005f71bdc"
+  },
+  {
+    "slug": "sb-help-for-small-business",
+    "url": "https://smallbusiness.fairwork.gov.au/help-for-small-business",
+    "title": "Help for Small Business",
+    "scraped_at": "2026-05-02T01:22:32.029263+00:00",
+    "section": "small-business",
+    "char_count": 8315,
+    "sha256": "f695e8d6a846f2429ea018070134c0458e613e44733208fd64a5999a77311635"
+  },
+  {
+    "slug": "sb-hiring-employees",
+    "url": "https://smallbusiness.fairwork.gov.au/hiring-employees",
+    "title": "Hiring employees",
+    "scraped_at": "2026-05-02T01:22:24.061822+00:00",
+    "section": "small-business",
+    "char_count": 5444,
+    "sha256": "03ee394b418dd664bfe325f1db3e7c93402c369dcfec0cab27424c6052f27980"
+  },
+  {
+    "slug": "sb-index",
+    "url": "https://smallbusiness.fairwork.gov.au/",
+    "title": "Homepage",
+    "scraped_at": "2026-05-02T01:22:21.955869+00:00",
+    "section": "small-business",
+    "char_count": 814,
+    "sha256": "ef7e57674495581af17b994c80717b3ba349a3b55e72f6b87a213703c83bcf31"
+  },
+  {
+    "slug": "sb-keeping-the-right-records",
+    "url": "https://smallbusiness.fairwork.gov.au/keeping-the-right-records",
+    "title": "Keeping the right records",
+    "scraped_at": "2026-05-02T01:22:25.961479+00:00",
+    "section": "small-business",
+    "char_count": 2519,
+    "sha256": "2ffad6e5432dc51c7c69f2a493a7194a8c347cfcf2e450ab37ae76da1819a740"
+  },
+  {
+    "slug": "sb-leave",
+    "url": "https://smallbusiness.fairwork.gov.au/leave",
+    "title": "Leave",
+    "scraped_at": "2026-05-02T01:22:28.018422+00:00",
+    "section": "small-business",
+    "char_count": 7818,
+    "sha256": "d32b20895a44c9b015ef2c53a527689a80b772ef1691aa5975ba82ded8a5c52b"
+  },
+  {
+    "slug": "sb-managing-employee-performance",
+    "url": "https://smallbusiness.fairwork.gov.au/managing-employee-performance",
+    "title": "Managing employee performance",
+    "scraped_at": "2026-05-02T01:22:27.067581+00:00",
+    "section": "small-business",
+    "char_count": 6253,
+    "sha256": "1eb0d237735e63a61973e9602e96e8e643f8e56d16db1aa017ae75bc01270317"
+  },
+  {
+    "slug": "sb-paying-employees",
+    "url": "https://smallbusiness.fairwork.gov.au/paying-employees",
+    "title": "Paying employees",
+    "scraped_at": "2026-05-02T01:22:25.112035+00:00",
+    "section": "small-business",
+    "char_count": 6882,
+    "sha256": "07e927fd4f328ac663ef64e2e9dfd770b09fc0b9b1d393f1cae7ea8454ce90e5"
+  }
+]

@@ -26,10 +26,10 @@ node_modules/
 out/
 *.tsbuildinfo
 
-# Data (never commit corpus, chunks, or vector store)
-data/raw/
-data/processed/
-data/chroma/
+# Data
+data/raw/         # raw HTML cache; reproducible from data/processed/manifest.json
+data/chroma/      # vector store; rebuilt from data/processed/ via `make ingest`
+# data/processed/ IS committed — the corpus markdown + manifest.json is the lockfile
 
 # Eval outputs (reports are generated; keep dataset.yaml tracked)
 backend/evals/reports/

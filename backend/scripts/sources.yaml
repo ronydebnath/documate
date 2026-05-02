@@ -1,0 +1,33 @@
+# Fair Work corpus seeds for DocuMate.
+#
+# Each entry is one section-index page. The scraper fetches the seed,
+# discovers internal links one level deep within the seed's own host,
+# and ingests pages that pass the content/title filters.
+#
+# Sections are stable identifiers used in expected_source_ids in
+# backend/evals/dataset.yaml; renaming a section breaks the eval.
+
+seeds:
+  - id: pay-and-wages
+    section: pay-and-wages
+    url: https://www.fairwork.gov.au/pay-and-wages
+
+  - id: leave
+    section: leave
+    url: https://www.fairwork.gov.au/leave
+
+  - id: ending-employment
+    section: ending-employment
+    url: https://www.fairwork.gov.au/ending-employment
+
+  - id: hours-of-work-breaks-and-rosters
+    section: employment-conditions
+    url: https://www.fairwork.gov.au/employment-conditions/hours-of-work-breaks-and-rosters
+
+  - id: awards
+    section: awards
+    url: https://www.fairwork.gov.au/employment-conditions/awards
+
+  - id: small-business
+    section: small-business
+    url: https://smallbusiness.fairwork.gov.au/

@@ -12,6 +12,21 @@ Employees waste hours hunting for answers that already exist in policy docs, run
 
 Scope: single-tenant, read-only corpus ([Fair Work Australia](https://www.fairwork.gov.au/)), answers with inline citations, and a repeatable eval framework so retrieval/generation changes can be measured.
 
+## Corpus
+
+DocuMate indexes ~40–60 pages from the [Fair Work Ombudsman](https://www.fairwork.gov.au/) website, covering six topic areas of practical employer/employee questions:
+
+1. Pay and wages (minimum wage, penalty rates, allowances)
+2. Leave (annual, personal/carer's, parental, long service)
+3. Ending employment (notice, redundancy, unfair dismissal)
+4. Employment conditions (hours, breaks, rosters)
+5. Awards (modern awards overview)
+6. Small business
+
+The seed URLs are version-controlled at [backend/scripts/sources.yaml](backend/scripts/sources.yaml). Pages are fetched once via `make scrape`, normalized to markdown with [trafilatura](https://trafilatura.readthedocs.io/), and committed to [data/processed/](data/processed/) along with [data/processed/manifest.json](data/processed/manifest.json) — the corpus lockfile. Re-running the scraper is idempotent. News, media releases, case studies, and PDFs are filtered out.
+
+**Attribution:** Content © Commonwealth of Australia (Fair Work Ombudsman), used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). DocuMate is an unofficial, non-commercial portfolio project and is not affiliated with or endorsed by Fair Work.
+
 ## How it works
 
 > _Architecture diagram placeholder — export from Excalidraw to `docs/diagrams/architecture.png`._

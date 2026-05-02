@@ -21,10 +21,12 @@ dependencies = [
     # Vector store
     "chromadb>=0.5",
 
-    # Ingestion
+    # Ingestion + scraping
     "beautifulsoup4>=4.12",
     "lxml>=5.3",
     "httpx>=0.28",
+    "requests>=2.32",
+    "trafilatura>=1.12",
     "tiktoken>=0.8",
 
     # Evals
@@ -53,3 +55,4 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
