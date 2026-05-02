@@ -4,7 +4,15 @@ An internal knowledge assistant that answers employee questions over company doc
 
 **[Live demo](#)** · **[Architecture](docs/architecture.md)** · **[Evals](docs/evals.md)**
 
-> _Screenshot / GIF placeholder — replace with `docs/diagrams/demo.gif` once the UI is running._
+![DocuMate empty-state hero with wordmark, headline "Plain answers, with the source.", four suggested questions, and a composer](docs/diagrams/screenshot-empty-state.png)
+
+<sub>An answered conversation: inline `[1]` / `[2]` citation markers, clickable chips below labelled by source title, and a latency breakdown.</sub>
+
+![Answered conversation: assistant explains casual employee leave entitlements with two inline citation markers and chips for "Annual leave" and "National Employment Standards"](docs/diagrams/screenshot-answered.png)
+
+<sub>Clicking a chip opens the right-side source drawer with excerpt, chunk ID, and a link to the original Fair Work Ombudsman page.</sub>
+
+![Source drawer panel showing the National Employment Standards excerpt, chunk ID, and source URL](docs/diagrams/screenshot-source-drawer.png)
 
 ## Why
 
