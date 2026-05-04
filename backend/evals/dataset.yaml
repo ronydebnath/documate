@@ -2,34 +2,180 @@
 #
 # Schema (see docs/evals.md for full methodology):
 #
-#   id:                  stable ID; prefix by corpus area (fw- = fairwork)
+#   id:                  stable ID; lowercase letters/digits/hyphens
 #   category:            factual_lookup | multi_hop | aggregation | negation | out_of_scope | ambiguous
 #   difficulty:          easy | medium | hard
 #   question:            the user-facing question, written as an employee might phrase it
-#   reference_answer:    1-3 sentence gold paraphrase; NOT a doc copy-paste
-#   expected_source_ids: list of source chunk/doc IDs that SHOULD appear in retrieval (drives precision@k, recall@k, MRR)
+#   reference_answer:    1-3 sentence gold paraphrase; do NOT copy-paste from the source
+#   expected_source_ids: doc-level slugs (optionally prefixed "fairwork/"). Drives Hit@k, MRR, Citation F1.
 #   must_contain:        substrings that MUST appear in a correct answer (cheap deterministic guard)
 #   must_not_contain:    substrings whose presence indicates hallucination or contamination
 #   notes:               why this item exists / what failure mode it guards against
 #
-# Seed: 3 entries covering 3 categories. Expand to ~30 across all 6 categories on Day 5.
+# Distribution: 10 factual_lookup, 5 multi_hop, 4 aggregation, 4 negation, 4 out_of_scope, 3 ambiguous = 30.
+#
+# Provenance: 3 entries (fw-notice-001, fw-leave-002, oos-weather-001) were
+# hand-written by Rony in Phase 0. The remaining 27 entries are tagged
+# `` and should be spot-checked against the corpus before the
+# baseline numbers are quoted in any external write-up. Failure modes to
+# look for: questions phrased in corpus vocabulary; reference answers that
+# are too close paraphrases of the source; must_contain strings the model
+# happens to produce rather than ones a correct answer must produce.
+
+# ============================================================
+# factual_lookup — single-chunk direct answers (target: 10)
+# ============================================================
 
 - id: fw-notice-001
   category: factual_lookup
   difficulty: easy
   question: "What is the minimum notice period when resigning in Australia?"
   reference_answer: >
-    The minimum notice period depends on the employee's continuous service:
-    1 week if under 1 year, 2 weeks for 1-3 years, 3 weeks for 3-5 years,
-    and 4 weeks for over 5 years. Employees over 45 with at least 2 years
-    of service receive an additional week.
+    The minimum notice period when resigning depends on what the employee's
+    award, enterprise agreement, or contract says. Casual employees do not
+    have to give notice. Award/agreement-free employees may need to give
+    "reasonable notice" if their contract is silent.
   expected_source_ids:
-    - fairwork/notice-of-termination-and-redundancy-pay
+    - fairwork/ending-employment-resignation
   must_contain:
-    - "1 week"
-    - "4 weeks"
+    - "casual"
   must_not_contain: []
   notes: "Single-chunk factual lookup. If hit@5 fails here, retrieval is broken at baseline."
+
+- id: factual-002  
+  category: factual_lookup
+  difficulty: easy
+  question: "How many weeks of paid annual leave does a full-time employee get each year?"
+  reference_answer: >
+    Full-time and part-time employees get 4 weeks of paid annual leave per year,
+    based on their ordinary hours of work. Casual employees are not entitled
+    to paid annual leave.
+  expected_source_ids:
+    - fairwork/leave-annual-leave
+  must_contain:
+    - "4 weeks"
+  must_not_contain: []
+  notes: "Direct NES entitlement. Should be a slam-dunk for retrieval."
+
+- id: factual-003  
+  category: factual_lookup
+  difficulty: easy
+  question: "How many days of paid sick and carer's leave is a full-time employee entitled to per year?"
+  reference_answer: >
+    Full-time employees are entitled to 10 days of paid sick and carer's leave
+    each year. Part-time employees get pro-rata. Unused leave rolls over.
+  expected_source_ids:
+    - fairwork/leave-sick-and-carers-leave
+  must_contain:
+    - "10"
+  must_not_contain: []
+  notes: "Numeric fact; tests that the model surfaces the right number rather than hedging."
+
+- id: factual-004  
+  category: factual_lookup
+  difficulty: easy
+  question: "What is the National Minimum Wage in Australia?"
+  reference_answer: >
+    As of 1 July 2025 the National Minimum Wage is $24.95 per hour or $948
+    per week. It applies to employees not covered by an award or registered
+    agreement.
+  expected_source_ids:
+    - fairwork/pay-and-wages-minimum-wages
+  must_contain:
+    - "$24.95"
+  must_not_contain: []
+  notes: "Time-sensitive fact. If the corpus is re-scraped after a wage review, update both the answer and must_contain."
+
+- id: factual-005  
+  category: factual_lookup
+  difficulty: easy
+  question: "How soon after my last day must my employer pay my final pay?"
+  reference_answer: >
+    Most awards require employers to pay an employee's final pay within
+    7 days after their last day of employment. Specific timing depends on
+    the applicable award, agreement, or contract.
+  expected_source_ids:
+    - fairwork/ending-employment-final-pay
+  must_contain:
+    - "7 days"
+  must_not_contain: []
+  notes: "Single-chunk numeric fact, with a 'depends on award' caveat the model should mention."
+
+- id: factual-006  
+  category: factual_lookup
+  difficulty: medium
+  question: "How often does an employer have to pay employees?"
+  reference_answer: >
+    Employers must pay employees at least monthly. Wages can be paid in cash,
+    by cheque, or directly by EFT into the employee's bank account.
+  expected_source_ids:
+    - fairwork/pay-and-wages-paying-wages
+  must_contain:
+    - "monthly"
+  must_not_contain: []
+  notes: "Common employer question; tests the corpus has practical operational facts."
+
+- id: factual-007  
+  category: factual_lookup
+  difficulty: medium
+  question: "When does an employee need to receive their pay slip?"
+  reference_answer: >
+    Employees must be given a pay slip within 1 working day of being paid.
+    Pay slips can be electronic or hard copy.
+  expected_source_ids:
+    - fairwork/pay-and-wages-paying-wages
+  must_contain:
+    - "1 working day"
+  must_not_contain: []
+  notes: "Numeric/operational fact. Tests retrieval pulls the right sub-section of the paying-wages page."
+
+- id: factual-008  
+  category: factual_lookup
+  difficulty: medium
+  question: "After how many months can I request flexible working arrangements?"
+  reference_answer: >
+    Some employees have the right to request flexible working arrangements
+    after 12 months of employment with the same employer.
+  expected_source_ids:
+    - fairwork/employment-conditions-flexibility-in-the-workplace
+  must_contain:
+    - "12 months"
+  must_not_contain: []
+  notes: "Single-chunk fact; risks getting confused with the 12-month casual rule."
+
+- id: factual-009  
+  category: factual_lookup
+  difficulty: medium
+  question: "How much paid family and domestic violence leave can employees take?"
+  reference_answer: >
+    Full-time, part-time, and casual employees are entitled to 10 days of
+    paid family and domestic violence leave per year. Balances renew on each
+    work anniversary and unused leave does not roll over.
+  expected_source_ids:
+    - fairwork/leave-family-and-domestic-violence-leave
+  must_contain:
+    - "10 days"
+  must_not_contain: []
+  notes: "Tests that the model surfaces the equal-for-all-employees rule (casuals included), which is unusual."
+
+- id: factual-010  
+  category: factual_lookup
+  difficulty: hard
+  question: "How many weeks of notice must an employer give to dismiss an employee with 4 years of continuous service?"
+  reference_answer: >
+    3 weeks. Under the NES, an employee with more than 3 but not more than
+    5 years of continuous service receives 3 weeks of notice. Employees over
+    45 with at least 2 years of service receive an additional week.
+  expected_source_ids:
+    - fairwork/ending-employment-dismissal
+  must_contain:
+    - "3 weeks"
+  must_not_contain: []
+  notes: "Tests the model can read a tiered table and pick the right row. Easy to mis-tier."
+
+# ============================================================
+# multi_hop — synthesise 2+ chunks (target: 5)
+# ============================================================
 
 - id: fw-leave-002
   category: multi_hop
@@ -41,8 +187,8 @@
     be used in the same year, subject to each scheme's own eligibility
     rules and notice requirements.
   expected_source_ids:
-    - fairwork/parental-leave
-    - fairwork/sick-and-carers-leave
+    - fairwork/leave-parental-leave
+    - fairwork/leave-sick-and-carers-leave
   must_contain:
     - "yes"
   must_not_contain:
@@ -50,18 +196,333 @@
     - "not allowed"
   notes: "Requires combining two separate leave-type pages; probes multi-chunk retrieval and synthesis."
 
+- id: multihop-002  
+  category: multi_hop
+  difficulty: easy
+  question: "If I'm made redundant, what should be in my final pay?"
+  reference_answer: >
+    Final pay when made redundant includes wages owing for hours worked,
+    accrued annual leave (with leave loading), payment in lieu of notice
+    if applicable, redundancy pay based on continuous service, and any
+    accrued or pro-rata long service leave.
+  expected_source_ids:
+    - fairwork/ending-employment-final-pay
+    - fairwork/ending-employment-redundancy
+  must_contain:
+    - "redundancy"
+    - "annual leave"
+  must_not_contain: []
+  notes: "Two-chunk synthesis between final pay and redundancy pages."
+
+- id: multihop-003  
+  category: multi_hop
+  difficulty: medium
+  question: "What happens to my unused annual leave when I resign?"
+  reference_answer: >
+    Unused annual leave is paid out as part of final pay when employment
+    ends, including any annual leave loading. The leave loading applies
+    even if the relevant award, agreement, or contract says otherwise.
+  expected_source_ids:
+    - fairwork/leave-annual-leave
+    - fairwork/ending-employment-final-pay
+  must_contain:
+    - "paid out"
+  must_not_contain:
+    - "forfeited"
+  notes: "Combines annual-leave entitlement with the final-pay rule about loading on termination."
+
+- id: multihop-004  
+  category: multi_hop
+  difficulty: medium
+  question: "Does my unpaid parental leave count toward my length of service for notice purposes?"
+  reference_answer: >
+    Yes. Authorised unpaid leave such as unpaid parental leave is included
+    in continuous service when calculating an employee's NES notice period.
+    Unauthorised absences are not.
+  expected_source_ids:
+    - fairwork/ending-employment-dismissal
+    - fairwork/leave-parental-leave
+  must_contain:
+    - "yes"
+    - "continuous service"
+  must_not_contain: []
+  notes: "Cross-section synthesis (ending-employment + leave). Real edge case from the dismissal page example."
+
+- id: multihop-005  
+  category: multi_hop
+  difficulty: hard
+  question: "If I'm dismissed for serious misconduct, what payments am I still entitled to?"
+  reference_answer: >
+    For serious misconduct, the employer doesn't have to give notice or pay
+    in lieu of notice. The employer must still pay outstanding entitlements:
+    payment for time worked, any accrued annual leave (with loading), and
+    in some cases long service leave.
+  expected_source_ids:
+    - fairwork/ending-employment-dismissal
+    - fairwork/ending-employment-final-pay
+  must_contain:
+    - "annual leave"
+  must_not_contain: []
+  notes: "Requires combining dismissal rules (no notice for serious misconduct) with final-pay rules (entitlements still owed)."
+
+# ============================================================
+# aggregation — list/summarise across chunks (target: 4)
+# ============================================================
+
+- id: aggregation-001  
+  category: aggregation
+  difficulty: medium
+  question: "What entitlements are included in the National Employment Standards?"
+  reference_answer: >
+    The NES include maximum weekly hours, requests for flexible working
+    arrangements, casual employment, parental leave, annual leave,
+    personal/carer's leave (with compassionate and family and domestic
+    violence leave), community service leave, long service leave, public
+    holidays, superannuation contributions, notice of termination and
+    redundancy pay, and the Fair Work Information Statement plus Casual
+    Employment Information Statement.
+  expected_source_ids:
+    - fairwork/employment-conditions-national-employment-standards
+  must_contain:
+    - "annual leave"
+    - "long service leave"
+    - "public holidays"
+    - "parental leave"
+  must_not_contain: []
+  notes: "Aggregation against a single canonical list page. Misses on this entry indicate the model is summarising rather than enumerating."
+
+- id: aggregation-002  
+  category: aggregation
+  difficulty: medium
+  question: "Which NES leave entitlements are casual employees entitled to?"
+  reference_answer: >
+    Casual employees get paid family and domestic violence leave, unpaid
+    carer's leave (2 days per occasion), unpaid compassionate leave, and
+    unpaid community service leave. After 12 months of regular and
+    systematic employment they can also access unpaid parental leave.
+    In some states, long-serving casuals are eligible for long service leave.
+  expected_source_ids:
+    - fairwork/employment-conditions-national-employment-standards
+    - fairwork/leave-sick-and-carers-leave
+  must_contain:
+    - "unpaid carer"
+    - "family and domestic violence"
+  must_not_contain:
+    - "annual leave"
+  notes: "Aggregates across two pages. Tests the model excludes paid annual leave (a common confusion)."
+
+- id: aggregation-003  
+  category: aggregation
+  difficulty: hard
+  question: "What kinds of business changes typically lead to redundancies?"
+  reference_answer: >
+    Redundancies happen when a business introduces new technology, slows
+    down due to lower sales or production, closes down, relocates interstate
+    or overseas, or restructures or reorganises because of a merger or
+    takeover. They can also occur when the employer becomes insolvent
+    or bankrupt.
+  expected_source_ids:
+    - fairwork/ending-employment-redundancy
+  must_contain:
+    - "new technology"
+    - "merger"
+  must_not_contain: []
+  notes: "Single-page list, but the model has to enumerate rather than summarise."
+
+- id: aggregation-004  
+  category: aggregation
+  difficulty: hard
+  question: "What kinds of behaviour count as serious misconduct that justifies dismissal without notice?"
+  reference_answer: >
+    Examples of serious misconduct include theft, fraud, assault or sexual
+    harassment, causing serious and imminent risk to a person's health,
+    jeopardising the employer's profits, and refusing to follow a lawful
+    and reasonable instruction that is part of the employee's job.
+  expected_source_ids:
+    - fairwork/ending-employment-dismissal
+  must_contain:
+    - "theft"
+    - "fraud"
+  must_not_contain: []
+  notes: "Aggregates a bullet list under a specific subheading; tests retrieval pulls the right chunk."
+
+# ============================================================
+# negation — answer is "no" / "not required" / "not covered" (target: 4)
+# ============================================================
+
+- id: negation-001  
+  category: negation
+  difficulty: easy
+  question: "Are casual employees entitled to paid annual leave?"
+  reference_answer: >
+    No. Casual employees are not entitled to paid annual leave. They receive
+    a casual loading instead, which compensates for the absence of leave
+    entitlements.
+  expected_source_ids:
+    - fairwork/leave-annual-leave
+  must_contain:
+    - "not entitled"
+  must_not_contain: []
+  notes: "Negation easy mode. The model should clearly say no, not hedge."
+
+- id: negation-002  
+  category: negation
+  difficulty: easy
+  question: "Do casual employees have to give notice when they resign?"
+  reference_answer: >
+    No. Casual employees are not required to give notice when they resign,
+    although it is best practice to inform the employer of their last day.
+  expected_source_ids:
+    - fairwork/ending-employment-resignation
+  must_contain:
+    - "no"
+  must_not_contain:
+    - "must give notice"
+  notes: "Tests the model returns 'no' for a yes/no question rather than launching into prose about non-casual rules."
+
+- id: negation-003  
+  category: negation
+  difficulty: medium
+  question: "Is unused sick and carer's leave paid out when employment ends?"
+  reference_answer: >
+    No. Sick and carer's leave is not paid out when employment ends.
+    Only unused annual leave is paid out as part of final pay.
+  expected_source_ids:
+    - fairwork/ending-employment-final-pay
+  must_contain:
+    - "not"
+  must_not_contain:
+    - "yes, sick"
+  notes: "The contrast with annual leave (which IS paid out) is the trap; tests precise retrieval."
+
+- id: negation-004  
+  category: negation
+  difficulty: medium
+  question: "Does an employer have to give notice if they dismiss someone for serious misconduct?"
+  reference_answer: >
+    No. When an employee is dismissed for serious misconduct, the employer
+    isn't required to give notice of termination. They must still pay
+    outstanding entitlements such as accrued annual leave.
+  expected_source_ids:
+    - fairwork/ending-employment-dismissal
+  must_contain:
+    - "not required"
+  must_not_contain: []
+  notes: "Tests that the model surfaces the misconduct exception, not just the general notice rule."
+
+# ============================================================
+# out_of_scope — must refuse with the exact refusal phrase (target: 4)
+# Refusal phrase (from app/prompts/answer.py):
+#   "I don't have information on that in the Fair Work documents I have access to."
+# ============================================================
+
 - id: oos-weather-001
   category: out_of_scope
   difficulty: easy
   question: "What's the weather in Sydney today?"
   reference_answer: >
-    I don't know. This question isn't covered by the documents available
-    to me; please check a weather service.
+    The system should refuse with the exact refusal phrase, since this
+    question is outside the Fair Work documents.
   expected_source_ids: []
   must_contain:
-    - "don't know"
+    - "don't have information"
   must_not_contain:
     - "sunny"
     - "rain"
     - "degrees"
   notes: "Refusal test. System must decline cleanly instead of hallucinating weather data."
+
+- id: oos-002  
+  category: out_of_scope
+  difficulty: easy
+  question: "What is the personal income tax rate in Australia?"
+  reference_answer: >
+    The system should refuse. Personal income tax rates are an ATO matter,
+    not Fair Work.
+  expected_source_ids: []
+  must_contain:
+    - "don't have information"
+  must_not_contain:
+    - "marginal rate"
+    - "37%"
+    - "45%"
+  notes: "Common adjacent question (about money/work) that the system must decline."
+
+- id: oos-003  
+  category: out_of_scope
+  difficulty: easy
+  question: "How do I sponsor an overseas worker for an Australian work visa?"
+  reference_answer: >
+    The system should refuse. Visa sponsorship is a Department of Home Affairs
+    matter, not Fair Work.
+  expected_source_ids: []
+  must_contain:
+    - "don't have information"
+  must_not_contain:
+    - "subclass 482"
+    - "TSS visa"
+    - "nominate"
+  notes: "Plausible employer question that retrieves Fair Work content (employment relationship) but isn't actually covered."
+
+- id: oos-004  
+  category: out_of_scope
+  difficulty: medium
+  question: "What's the current superannuation guarantee rate?"
+  reference_answer: >
+    The system should refuse. The Superannuation Guarantee rate is set by
+    the ATO, not Fair Work, even though Fair Work mentions superannuation
+    as an NES entitlement.
+  expected_source_ids: []
+  must_contain:
+    - "don't have information"
+  must_not_contain:
+    - "11.5%"
+    - "12%"
+    - "11%"
+  notes: "Adversarial: superannuation IS in the NES list, so retrieval will find related chunks. Tests refusal even when relevant-looking context is present."
+
+# ============================================================
+# ambiguous — must ask a clarifying question (target: 3)
+# Correct response: contains "?" AND a clarifier marker
+# ("could you", "do you mean", "which", "more specifically", "clarify",
+#  "what kind", "what type", "can you specify").
+# ============================================================
+
+- id: ambiguous-001  
+  category: ambiguous
+  difficulty: easy
+  question: "Can I take leave?"
+  reference_answer: >
+    The question doesn't specify which type of leave or the circumstances.
+    The system should ask the user to specify which leave type
+    (annual, sick, parental, etc.) and the reason.
+  expected_source_ids: []
+  must_contain: []
+  must_not_contain: []
+  notes: "Maximally generic leave question. Many models will guess 'annual leave'; correct behavior is to ask which type."
+
+- id: ambiguous-002  
+  category: ambiguous
+  difficulty: medium
+  question: "How much notice do I need to give?"
+  reference_answer: >
+    The notice rules differ for resignation vs employer-initiated termination,
+    and for casual vs permanent employees. The system should ask whether the
+    user is the employee or employer, and the type of employment.
+  expected_source_ids: []
+  must_contain: []
+  must_not_contain: []
+  notes: "Underdetermined: notice rules differ by perspective and employment type."
+
+- id: ambiguous-003  
+  category: ambiguous
+  difficulty: medium
+  question: "What's my pay rate?"
+  reference_answer: >
+    Pay rates depend on the employee's award classification, industry,
+    employment type, and age. The system should ask which award covers
+    the employee or which industry they work in.
+  expected_source_ids: []
+  must_contain: []
+  must_not_contain: []
+  notes: "Cannot be answered without knowing the award. Tests the system asks instead of guessing the National Minimum Wage."

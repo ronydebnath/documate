@@ -1,0 +1,5 @@
+name: baseline
+top_k: 5
+rerank_enabled: false
+generator_model: claude-sonnet-4-6
+judge_model: claude-haiku-4-5-20251001

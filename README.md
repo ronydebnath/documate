@@ -60,12 +60,25 @@ make eval              # runs the baseline eval config
 
 Custom eval framework measuring retrieval quality and answer faithfulness against a hand-crafted dataset of ~30 Q&A pairs across 6 categories (factual lookup, multi-hop, aggregation, negation, out-of-scope, ambiguous).
 
-| Config               | Hit@5 | MRR  | Faithfulness | Citation Acc. |
-|----------------------|-------|------|--------------|---------------|
-| Baseline             | _TBD_ | _TBD_| _TBD_        | _TBD_         |
-| + Cross-enc. rerank  | _TBD_ | _TBD_| _TBD_        | _TBD_         |
+| Config               | Hit@5 | MRR  | Faithfulness | Citation F1 | MustContain | Refusal |
+|----------------------|-------|------|--------------|-------------|-------------|---------|
+| Baseline (n=30)      | 0.96  | 0.90 | 0.97         | 0.64        | 0.87        | 0.43    |
+| + Cross-enc. rerank  | _TBD_ | _TBD_| _TBD_        | _TBD_       | _TBD_       | _TBD_   |
 
-Full methodology, judge prompt, and per-category breakdown in [docs/evals.md](docs/evals.md).
+Per-category breakdown (n shown):
+
+| Category            | n | Hit@5 | MRR  | Faithful | Cite F1 | MustContain | Refusal |
+|---------------------|---|-------|------|----------|---------|-------------|---------|
+| factual_lookup      |10 | 1.00  | 0.95 | 1.00     | 0.80    | 1.00        | —       |
+| multi_hop           | 5 | 1.00  | 0.84 | 0.80     | 0.37    | 0.60        | —       |
+| aggregation         | 4 | 1.00  | 1.00 | 1.00     | 0.75    | 1.00        | —       |
+| negation            | 4 | 0.75  | 0.75 | 1.00     | 0.50    | 0.75        | —       |
+| out_of_scope        | 4 | —     | —    | 1.00     | —       | 0.75        | 0.75    |
+| ambiguous           | 3 | —     | —    | 1.00     | —       | 1.00        | 0.00    |
+
+**What the baseline shows.** Retrieval is strong (Hit@5 = 0.96, MRR = 0.90) and faithfulness is high (0.97) — the system rarely fabricates facts that aren't in the retrieved context. The two real weaknesses are **multi-hop synthesis** (Faithful drops to 0.80, MustContain to 0.60: the model retrieves both relevant pages but often declines to combine them, hedging instead of answering) and **clarifying ambiguous queries** (Refusal accuracy = 0/3: when a question is under-specified, the model answers anyway with whatever context retrieves rather than asking which-leave-type / employer-or-employee). The OOS adversarial entry on superannuation rates also failed (model answered "12%" from a corpus chunk that legitimately mentions it) — that's a genuine tension between "answer only from context" and "decline topics outside Fair Work's remit," which a confidence-gated refusal in Phase 6 could address. Citation F1 of 0.64 is dragged down by the model occasionally citing a sister-section page (e.g. `sb-paying-employees` instead of the main `pay-and-wages-paying-wages`) that contains the same fact — fixable by listing all valid source slugs in the dataset.
+
+Methodology, judge prompt, slug-prefix matching, and the full report in [docs/evals.md](docs/evals.md) and [backend/evals/reports/](backend/evals/reports/).
 
 ## Engineering decisions
 
