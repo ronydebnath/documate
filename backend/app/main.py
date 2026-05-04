@@ -41,9 +41,17 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Wire dependencies once at startup. Embedder lazy-loads on first call.
+    # Wire dependencies once at startup. Embedder/reranker lazy-load on first call.
     store = ChromaStore(s.chroma_persist_dir, s.chroma_collection)
-    retriever = Retriever(store)
+    rerank_fn = None
+    if s.reranker_enabled:
+        from app.services.reranker import rerank as rerank_fn  # imported only when enabled
+
+    retriever = Retriever(
+        store,
+        reranker=rerank_fn,
+        rerank_candidates=s.rerank_candidates,
+    )
     generator = Generator(
         api_key=s.anthropic_api_key,
         model=s.anthropic_generator_model,

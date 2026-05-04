@@ -287,6 +287,114 @@ def write_reports(report: RunReport) -> tuple[Path, Path]:
     return json_path, md_path
 
 
+# ---------- Comparison vs prior run ----------
+
+def _find_latest_report_json(config_name: str) -> Path | None:
+    """Find the most recently modified reports/{config_name}_*.json."""
+    candidates = sorted(
+        REPORTS_DIR.glob(f"{config_name}_*.json"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
+def _load_report(path: Path) -> RunReport:
+    return RunReport.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def _delta(a: float | None, b: float | None) -> str:
+    """Format `b - a` (i.e. new minus old). '—' when either side is missing."""
+    if a is None or b is None:
+        return "—"
+    d = b - a
+    sign = "+" if d > 0 else ("" if d == 0 else "")
+    arrow = "" if abs(d) < 0.005 else (" ▲" if d > 0 else " ▼")
+    return f"{sign}{d:+.2f}{arrow}".replace("++", "+")
+
+
+def _row(slice_name: str, base, new) -> str:
+    return (
+        f"| {slice_name} | "
+        f"{_fmt(base.hit_at_k)} → {_fmt(new.hit_at_k)} ({_delta(base.hit_at_k, new.hit_at_k)}) | "
+        f"{_fmt(base.mrr)} → {_fmt(new.mrr)} ({_delta(base.mrr, new.mrr)}) | "
+        f"{_fmt(base.faithfulness)} → {_fmt(new.faithfulness)} ({_delta(base.faithfulness, new.faithfulness)}) | "
+        f"{_fmt(base.citation_f1)} → {_fmt(new.citation_f1)} ({_delta(base.citation_f1, new.citation_f1)}) | "
+        f"{_fmt(base.must_contain_pass_rate)} → {_fmt(new.must_contain_pass_rate)} ({_delta(base.must_contain_pass_rate, new.must_contain_pass_rate)}) | "
+        f"{_fmt(base.refusal_accuracy)} → {_fmt(new.refusal_accuracy)} ({_delta(base.refusal_accuracy, new.refusal_accuracy)}) |"
+    )
+
+
+def _format_comparison_section(my: RunReport, other: RunReport) -> str:
+    out: list[str] = []
+    out.append("")
+    out.append(f"## Comparison vs `{other.config_name}` ({other.started_at})")
+    out.append("")
+    out.append(
+        f"Direction of arrows reflects change in `{my.config_name}` relative to "
+        f"`{other.config_name}`. ▲ = improvement, ▼ = regression. Format: `{other.config_name}` → `{my.config_name}` (Δ)."
+    )
+    out.append("")
+    out.append(
+        "| Slice | Hit@k | MRR | Faithful | Cite F1 | MustContain | Refusal |"
+    )
+    out.append(
+        "|-------|-------|-----|----------|---------|-------------|---------|"
+    )
+    out.append(_row("**all**", other.aggregates.overall, my.aggregates.overall))
+    cats = sorted(set(my.aggregates.by_category) | set(other.aggregates.by_category))
+    for cat in cats:
+        base_agg = other.aggregates.by_category.get(cat)
+        new_agg = my.aggregates.by_category.get(cat)
+        if base_agg is None or new_agg is None:
+            continue
+        out.append(_row(cat, base_agg, new_agg))
+    out.append("")
+
+    # Regression call-out
+    regressions: list[tuple[str, str, float]] = []
+    metrics = [
+        ("Hit@k", "hit_at_k"),
+        ("MRR", "mrr"),
+        ("Faithful", "faithfulness"),
+        ("Cite F1", "citation_f1"),
+        ("MustContain", "must_contain_pass_rate"),
+        ("Refusal", "refusal_accuracy"),
+    ]
+    for cat in ["__overall__", *cats]:
+        base_agg = other.aggregates.overall if cat == "__overall__" else other.aggregates.by_category.get(cat)
+        new_agg = my.aggregates.overall if cat == "__overall__" else my.aggregates.by_category.get(cat)
+        if base_agg is None or new_agg is None:
+            continue
+        for label, attr in metrics:
+            a = getattr(base_agg, attr)
+            b = getattr(new_agg, attr)
+            if a is None or b is None:
+                continue
+            d = b - a
+            if d < -0.005:
+                slice_name = "overall" if cat == "__overall__" else cat
+                regressions.append((slice_name, label, d))
+    if regressions:
+        out.append("### Regressions to investigate")
+        out.append("")
+        for slice_name, label, d in regressions:
+            out.append(f"- `{slice_name}` · {label}: {d:+.2f}")
+        out.append("")
+    else:
+        out.append("_No metric regressed relative to baseline._")
+        out.append("")
+
+    return "\n".join(out)
+
+
+def write_comparison(md_path: Path, my: RunReport, other: RunReport) -> None:
+    """Append a comparison section to an existing markdown report."""
+    section = _format_comparison_section(my, other)
+    with md_path.open("a", encoding="utf-8") as f:
+        f.write(section)
+
+
 # ---------- CLI ----------
 
 def main() -> int:
@@ -303,6 +411,15 @@ def main() -> int:
         default=None,
         help="Cap total number of cases (for smoke testing)",
     )
+    parser.add_argument(
+        "--compare-to",
+        default=None,
+        help=(
+            "Name of a prior config (e.g. 'baseline'). After this run, "
+            "find the most recent reports/<name>_*.json and append a diff "
+            "table to the markdown report."
+        ),
+    )
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -317,6 +434,8 @@ def main() -> int:
     top_k = int(cfg.get("top_k", settings.retrieval_top_k))
     generator_model = cfg.get("generator_model", settings.anthropic_generator_model)
     judge_model = cfg.get("judge_model", settings.anthropic_judge_model)
+    rerank_enabled = bool(cfg.get("rerank_enabled", settings.reranker_enabled))
+    rerank_candidates = int(cfg.get("rerank_candidates", settings.rerank_candidates))
     config_name = cfg.get("name", args.config)
 
     cases = load_dataset()
@@ -330,12 +449,17 @@ def main() -> int:
         return 1
 
     log.info(
-        "Config=%s top_k=%d gen=%s judge=%s cases=%d",
-        config_name, top_k, generator_model, judge_model, len(cases),
+        "Config=%s top_k=%d rerank=%s gen=%s judge=%s cases=%d",
+        config_name, top_k, rerank_enabled, generator_model, judge_model, len(cases),
     )
 
     store = ChromaStore(settings.chroma_persist_dir, settings.chroma_collection)
-    retriever = Retriever(store)
+    rerank_fn = None
+    if rerank_enabled:
+        from app.services.reranker import rerank as rerank_fn  # lazy import; heavy deps
+    retriever = Retriever(
+        store, reranker=rerank_fn, rerank_candidates=rerank_candidates
+    )
     generator = Generator(api_key=settings.anthropic_api_key, model=generator_model)
     judge = ClaudeJudge(api_key=settings.anthropic_api_key, model=judge_model)
 
@@ -369,10 +493,26 @@ def main() -> int:
     )
     json_path, md_path = write_reports(report)
 
+    # Optional: append comparison vs a prior run (e.g. baseline)
+    compare_path: Path | None = None
+    if args.compare_to:
+        compare_path = _find_latest_report_json(args.compare_to)
+        if compare_path is None:
+            log.warning(
+                "No prior report found for --compare-to=%s; skipping diff",
+                args.compare_to,
+            )
+        else:
+            other = _load_report(compare_path)
+            write_comparison(md_path, report, other)
+            log.info("Appended diff vs %s", compare_path.relative_to(REPO_ROOT))
+
     print()
     print("=" * 60)
     print(f"Wrote: {json_path.relative_to(REPO_ROOT)}")
     print(f"Wrote: {md_path.relative_to(REPO_ROOT)}")
+    if compare_path is not None:
+        print(f"Diff:  vs {compare_path.relative_to(REPO_ROOT)}")
     print("=" * 60)
 
     overall = report.aggregates.overall

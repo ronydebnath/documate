@@ -60,25 +60,33 @@ make eval              # runs the baseline eval config
 
 Custom eval framework measuring retrieval quality and answer faithfulness against a hand-crafted dataset of ~30 Q&A pairs across 6 categories (factual lookup, multi-hop, aggregation, negation, out-of-scope, ambiguous).
 
-| Config               | Hit@5 | MRR  | Faithfulness | Citation F1 | MustContain | Refusal |
-|----------------------|-------|------|--------------|-------------|-------------|---------|
-| Baseline (n=30)      | 0.96  | 0.90 | 0.97         | 0.64        | 0.87        | 0.43    |
-| + Cross-enc. rerank  | _TBD_ | _TBD_| _TBD_        | _TBD_       | _TBD_       | _TBD_   |
+| Config                      | Hit@5 | MRR  | Faithfulness | Citation F1 | MustContain | Refusal |
+|-----------------------------|-------|------|--------------|-------------|-------------|---------|
+| Baseline (n=30)             | 0.96  | 0.90 | 0.97         | 0.64        | 0.87        | 0.43    |
+| + Cross-encoder rerank      | 0.96  | 0.84 | 0.93         | 0.78        | 0.90        | 0.43    |
+| Δ                           | +0.00 | -0.06 ▼ | -0.03 ▼   | +0.13 ▲     | +0.03 ▲     | +0.00   |
 
-Per-category breakdown (n shown):
+Per-category breakdown (baseline → reranked, n shown):
 
-| Category            | n | Hit@5 | MRR  | Faithful | Cite F1 | MustContain | Refusal |
-|---------------------|---|-------|------|----------|---------|-------------|---------|
-| factual_lookup      |10 | 1.00  | 0.95 | 1.00     | 0.80    | 1.00        | —       |
-| multi_hop           | 5 | 1.00  | 0.84 | 0.80     | 0.37    | 0.60        | —       |
-| aggregation         | 4 | 1.00  | 1.00 | 1.00     | 0.75    | 1.00        | —       |
-| negation            | 4 | 0.75  | 0.75 | 1.00     | 0.50    | 0.75        | —       |
-| out_of_scope        | 4 | —     | —    | 1.00     | —       | 0.75        | 0.75    |
-| ambiguous           | 3 | —     | —    | 1.00     | —       | 1.00        | 0.00    |
+| Category            | n | Hit@5         | MRR            | Faithful       | Cite F1        | MustContain    | Refusal       |
+|---------------------|---|---------------|----------------|----------------|----------------|----------------|---------------|
+| factual_lookup      |10 | 1.00 → 1.00   | 0.95 → 0.95    | 1.00 → 1.00    | 0.80 → 0.83 ▲  | 1.00 → 1.00    | —             |
+| multi_hop           | 5 | 1.00 → 0.80 ▼ | 0.84 → 0.60 ▼  | 0.80 → 0.80    | 0.37 → 0.50 ▲  | 0.60 → 0.80 ▲  | —             |
+| aggregation         | 4 | 1.00 → 1.00   | 1.00 → 0.88 ▼  | 1.00 → 1.00    | 0.75 → 0.83 ▲  | 1.00 → 1.00    | —             |
+| negation            | 4 | 0.75 → 1.00 ▲ | 0.75 → 0.83 ▲  | 1.00 → 1.00    | 0.50 → 0.92 ▲  | 0.75 → 0.75    | —             |
+| out_of_scope        | 4 | —             | —              | 1.00 → 1.00    | —              | 0.75 → 0.75    | 0.75 → 0.75   |
+| ambiguous           | 3 | —             | —              | 1.00 → 0.67 ▼  | —              | 1.00 → 1.00    | 0.00 → 0.00   |
 
-**What the baseline shows.** Retrieval is strong (Hit@5 = 0.96, MRR = 0.90) and faithfulness is high (0.97) — the system rarely fabricates facts that aren't in the retrieved context. The two real weaknesses are **multi-hop synthesis** (Faithful drops to 0.80, MustContain to 0.60: the model retrieves both relevant pages but often declines to combine them, hedging instead of answering) and **clarifying ambiguous queries** (Refusal accuracy = 0/3: when a question is under-specified, the model answers anyway with whatever context retrieves rather than asking which-leave-type / employer-or-employee). The OOS adversarial entry on superannuation rates also failed (model answered "12%" from a corpus chunk that legitimately mentions it) — that's a genuine tension between "answer only from context" and "decline topics outside Fair Work's remit," which a confidence-gated refusal in Phase 6 could address. Citation F1 of 0.64 is dragged down by the model occasionally citing a sister-section page (e.g. `sb-paying-employees` instead of the main `pay-and-wages-paying-wages`) that contains the same fact — fixable by listing all valid source slugs in the dataset.
+Latency cost: median retrieve 18 ms → ~2000 ms with rerank (cross-encoder runs on CPU; fetches top-20 from BGE then rescores).
 
-Methodology, judge prompt, slug-prefix matching, and the full report in [docs/evals.md](docs/evals.md) and [backend/evals/reports/](backend/evals/reports/).
+**Findings — the rerank result is genuinely mixed**, not a clean win:
+
+- **Citation F1: +13pp overall (+42pp on negation).** The cross-encoder picks chunks the model actually cites. Strongest improvement category: `negation`, where the baseline retriever was getting close-but-wrong neighbours.
+- **MRR: -6pp overall, -24pp on multi-hop.** The cross-encoder reorders pairs by `(query, chunk)` semantic similarity, which on multi-hop questions is sometimes *less* informative than BGE's vector cosine — the chunks that "look most like the question" aren't always the ones a multi-hop answer needs.
+- **MustContain pass rate: +20pp on multi-hop.** The reranked context appears to unblock the hedging behaviour from baseline (where the model declined to synthesise even when both gold pages were retrieved).
+- **Latency: ~100× slower retrieve.** Real cost of running a cross-encoder on CPU with top-20 candidates.
+
+Whether to keep this on by default is in [docs/decisions/0002-reranking.md](docs/decisions/0002-reranking.md). Methodology, judge prompt, slug-prefix matching, and the full report in [docs/evals.md](docs/evals.md) and [backend/evals/reports/](backend/evals/reports/).
 
 ## Engineering decisions
 

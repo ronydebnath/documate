@@ -48,6 +48,10 @@ class Settings(BaseSettings):
     # Retrieval
     retrieval_top_k: int = Field(default=5, alias="RETRIEVAL_TOP_K")
     reranker_enabled: bool = Field(default=False, alias="RERANKER_ENABLED")
+    rerank_candidates: int = Field(default=20, alias="RERANK_CANDIDATES")
+    reranker_model: str = Field(
+        default="BAAI/bge-reranker-base", alias="RERANKER_MODEL"
+    )
 
     # API
     backend_host: str = Field(default="0.0.0.0", alias="BACKEND_HOST")

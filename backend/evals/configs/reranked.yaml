@@ -1,0 +1,7 @@
+name: reranked
+top_k: 5
+rerank_enabled: true
+rerank_candidates: 20
+reranker_model: BAAI/bge-reranker-base
+generator_model: claude-sonnet-4-6
+judge_model: claude-haiku-4-5-20251001
