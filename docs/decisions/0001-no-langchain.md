@@ -11,7 +11,7 @@ For a portfolio project aimed at a senior data/GenAI engineering role, "fast sca
 
 ## Decision
 
-Use the Anthropic and OpenAI SDKs directly. Write our own ~200 lines for chunking, retrieval, prompt assembly, and generation. ChromaDB is used as a thin vector store — we don't wrap it in LangChain's `VectorStoreRetriever`.
+Use the Anthropic SDK directly for generation and judging, and `sentence-transformers` directly for embeddings. Write our own ~200 lines for chunking, retrieval, prompt assembly, and generation. ChromaDB is used as a thin vector store — we don't wrap it in LangChain's `VectorStoreRetriever`. The choice of `BAAI/bge-small-en-v1.5` over hosted embedding APIs is documented separately in [ADR-0003](./0003-bge-over-openai-embeddings.md).
 
 ## Consequences
 

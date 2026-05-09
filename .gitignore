@@ -41,3 +41,4 @@ backend/evals/reports/
 *.swp
 .vercel
 .env*.local
+docs/portfolio.md

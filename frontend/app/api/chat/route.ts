@@ -16,9 +16,13 @@ export async function POST(req: Request): Promise<Response> {
       method: "POST",
       headers,
       body,
-      // Generous timeout: the first request after a cold backend has to load
-      // the embedder weights (~6s).
-      signal: AbortSignal.timeout(45_000),
+      // Generous timeout. Fly.io is configured with auto_stop_machines, so
+      // the first request after idle has to: (a) wait for Fly to start the
+      // machine (~5-10s), then (b) load the BGE embedder from the baked HF
+      // cache (~6s). Capped at 55s (just under Vercel Hobby's 60s
+      // function ceiling) so the Vercel proxy returns a clean 502 before
+      // the platform itself kills the function.
+      signal: AbortSignal.timeout(55_000),
     });
     const text = await upstream.text();
     return new Response(text, {
@@ -36,3 +40,7 @@ export async function POST(req: Request): Promise<Response> {
 }
 
 export const runtime = "nodejs";
+// Vercel function ceiling. Hobby tier max is 60s; we ask for 60 and abort
+// upstream at 55s (see AbortSignal above) so we control the failure shape
+// instead of getting cut off mid-stream.
+export const maxDuration = 60;
