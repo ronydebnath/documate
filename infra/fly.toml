@@ -12,6 +12,12 @@ primary_region = "syd"
   EMBEDDING_DEVICE = "cpu"
   BACKEND_HOST = "0.0.0.0"
   BACKEND_PORT = "8080"
+  # Use the baked HF cache without calling out to huggingface.co at runtime.
+  # The Dockerfile pre-downloads BGE-small + bge-reranker-base into HF_HOME.
+  HF_HOME = "/app/backend/.hf-cache"
+  SENTENCE_TRANSFORMERS_HOME = "/app/backend/.hf-cache"
+  HF_HUB_OFFLINE = "1"
+  TRANSFORMERS_OFFLINE = "1"
 
 # No volume mount: the Chroma store is baked into the image at build time
 # (see infra/Dockerfile). To update the corpus: re-run `make ingest` locally
@@ -26,10 +32,10 @@ primary_region = "syd"
   processes = ["app"]
 
   [[http_service.checks]]
-    grace_period = "30s"
+    grace_period = "60s"
     interval = "30s"
     method = "GET"
-    timeout = "5s"
+    timeout = "10s"
     path = "/health"
 
 [[vm]]

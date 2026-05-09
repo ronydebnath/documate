@@ -39,3 +39,5 @@ backend/evals/reports/
 .idea/
 .vscode/
 *.swp
+.vercel
+.env*.local

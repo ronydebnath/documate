@@ -59,10 +59,12 @@ lint:
 deploy-api:
 	fly deploy --config infra/fly.toml --dockerfile infra/Dockerfile
 
-# Frontend deploys to Vercel. Requires a working `vercel` CLI auth and
-# the project linked to frontend/.
+# Frontend deploys to Vercel. Run from the repo root; the linked Vercel
+# project has Root Directory = "frontend" configured, and the CLI applies
+# that on top of CWD — so cd-ing into frontend/ first would resolve to
+# frontend/frontend and fail.
 deploy-web:
-	cd frontend && vercel --prod
+	vercel --prod
 
 deploy: deploy-api deploy-web
 
