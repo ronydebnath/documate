@@ -88,6 +88,31 @@ Latency cost: median retrieve 18 ms → ~2000 ms with rerank (cross-encoder runs
 
 Whether to keep this on by default is in [docs/decisions/0002-reranking.md](docs/decisions/0002-reranking.md). Methodology, judge prompt, slug-prefix matching, and the full report in [docs/evals.md](docs/evals.md) and [backend/evals/reports/](backend/evals/reports/).
 
+## Deploy your own
+
+Backend ships to Fly.io as a single image with the Chroma store baked in (no volume mount, fully self-contained). Frontend ships to Vercel.
+
+```bash
+# One-time
+fly auth login
+fly apps create documate-api          # or pick your own app name + edit infra/fly.toml
+fly secrets set ANTHROPIC_API_KEY=sk-ant-... \
+                CORS_ALLOWED_ORIGINS=https://your-vercel-domain.vercel.app \
+                DEMO_KEY=$(openssl rand -hex 16)   # optional shared secret
+
+# Build a fresh Chroma store, then deploy
+make ingest
+make deploy-api
+
+# Frontend
+cd frontend && vercel link             # link to a Vercel project
+vercel env add API_URL                 # https://documate-api.fly.dev
+vercel env add DEMO_KEY                # paste the value from `fly secrets`
+make deploy-web
+```
+
+Hardening that ships with the deploy: 10 req/min per IP rate limit on `/chat` ([slowapi](https://slowapi.readthedocs.io/)), CORS locked to the configured origins, optional shared-secret gate via `DEMO_KEY`. First request after a cold-start takes ~6s while the embedder loads from the baked HF cache.
+
 ## Engineering decisions
 
 - **No LangChain** — direct SDK calls keep the surface area small and auditable ([ADR-0001](docs/decisions/0001-no-langchain.md)).

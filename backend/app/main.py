@@ -10,6 +10,12 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.util import get_remote_address
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from app.config import get_settings
 from app.routes import chat as chat_route
@@ -24,6 +30,13 @@ def _split_origins(raw: str) -> list[str]:
     return [o.strip() for o in raw.split(",") if o.strip()]
 
 
+def _rate_limit_handler(_: Request, exc: RateLimitExceeded) -> JSONResponse:
+    return JSONResponse(
+        status_code=429,
+        content={"detail": f"Rate limit exceeded: {exc.detail}"},
+    )
+
+
 def create_app() -> FastAPI:
     logging.basicConfig(
         level=logging.INFO,
@@ -31,7 +44,12 @@ def create_app() -> FastAPI:
     )
     s = get_settings()
 
+    limiter = Limiter(key_func=get_remote_address, default_limits=[])
+
     app = FastAPI(title="DocuMate API", version="0.1.0")
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)
+    app.add_middleware(SlowAPIMiddleware)
 
     app.add_middleware(
         CORSMiddleware,
@@ -64,6 +82,8 @@ def create_app() -> FastAPI:
 
     app.state.store = store
     app.state.chat_service = chat_service
+    app.state.demo_key = s.demo_key
+    app.state.chat_rate_limit = s.chat_rate_limit
 
     app.include_router(health_route.router)
     app.include_router(chat_route.router)

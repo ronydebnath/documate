@@ -59,6 +59,8 @@ class Settings(BaseSettings):
     cors_allowed_origins: str = Field(
         default="http://localhost:3000", alias="CORS_ALLOWED_ORIGINS"
     )
+    chat_rate_limit: str = Field(default="10/minute", alias="CHAT_RATE_LIMIT")
+    demo_key: str = Field(default="", alias="DEMO_KEY")
 
     @field_validator("chroma_persist_dir")
     @classmethod

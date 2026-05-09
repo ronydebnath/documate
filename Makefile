@@ -1,4 +1,4 @@
-.PHONY: install scrape re-extract ingest dev backend frontend eval eval-rerank test fmt lint clean
+.PHONY: install scrape re-extract ingest dev backend frontend eval eval-rerank test fmt lint clean deploy-api deploy-web deploy
 
 # --- Setup ---
 
@@ -51,6 +51,20 @@ fmt:
 lint:
 	cd backend && uv run ruff check .
 	cd frontend && pnpm exec eslint .
+
+# --- Deploy ---
+
+# Backend deploys to Fly.io. Builds infra/Dockerfile from the repo root so
+# data/chroma/ is in the build context. Requires a working `fly` CLI auth.
+deploy-api:
+	fly deploy --config infra/fly.toml --dockerfile infra/Dockerfile
+
+# Frontend deploys to Vercel. Requires a working `vercel` CLI auth and
+# the project linked to frontend/.
+deploy-web:
+	cd frontend && vercel --prod
+
+deploy: deploy-api deploy-web
 
 # --- Clean ---
 

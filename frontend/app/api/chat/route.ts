@@ -1,16 +1,20 @@
-// Server-side proxy to FastAPI. Keeps the API_URL (and any future auth)
-// off the client bundle.
+// Server-side proxy to FastAPI. Keeps the API_URL and demo key off the
+// client bundle.
 
 const DEFAULT_API_URL = "http://127.0.0.1:8000";
 
 export async function POST(req: Request): Promise<Response> {
   const apiUrl = process.env.API_URL || DEFAULT_API_URL;
+  const demoKey = process.env.DEMO_KEY || "";
   const body = await req.text();
+
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (demoKey) headers["x-demo-key"] = demoKey;
 
   try {
     const upstream = await fetch(`${apiUrl}/chat`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers,
       body,
       // Generous timeout: the first request after a cold backend has to load
       // the embedder weights (~6s).

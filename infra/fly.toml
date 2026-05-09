@@ -1,0 +1,39 @@
+# Fly.io app config for DocuMate backend.
+# Deploy from the repo root: `fly deploy --config infra/fly.toml --dockerfile infra/Dockerfile`
+
+app = "documate-api"
+primary_region = "syd"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  CHROMA_PERSIST_DIR = "/data/chroma"
+  EMBEDDING_DEVICE = "cpu"
+  BACKEND_HOST = "0.0.0.0"
+  BACKEND_PORT = "8080"
+
+# No volume mount: the Chroma store is baked into the image at build time
+# (see infra/Dockerfile). To update the corpus: re-run `make ingest` locally
+# then `make deploy-api`.
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"
+  cpu_kind = "shared"
+  cpus = 2

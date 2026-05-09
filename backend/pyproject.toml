@@ -35,6 +35,7 @@ dependencies = [
     # Misc
     "tenacity>=9.0",
     "rich>=13.9",
+    "slowapi>=0.1.9",
 ]
 
 [dependency-groups]

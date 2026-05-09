@@ -1,0 +1,46 @@
+# Keep the build context lean. Only what the runtime image needs ends up in
+# the builder stage.
+
+# Frontend
+frontend/
+
+# Tests, notebooks, scripts
+backend/tests/
+backend/notebooks/
+backend/scripts/
+backend/evals/
+
+# Raw + processed corpus. The Chroma store IS baked into the image so the
+# runtime is self-contained (see infra/Dockerfile). Source markdown isn't
+# needed at runtime.
+data/raw/
+data/processed/
+
+# Docs and plans
+.plans/
+docs/
+
+# Python build artefacts
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.venv/
+
+# Node / Next
+**/node_modules/
+**/.next/
+**/.turbo/
+
+# Editor / git
+.git/
+.github/
+.vscode/
+.idea/
+.DS_Store
+
+# Env
+.env
+.env.*
+!.env.example
