@@ -1,6 +1,6 @@
 # DocuMate — Phase-by-Phase Build Plan
 
-A build plan for shipping DocuMate (Fair Work RAG assistant) in ~7–10 working days. Written to be handed to Claude Code in Cursor one phase at a time.
+A build plan for shipping DocuMate (Fair Work RAG assistant) in ~7–10 working days. Written to be handed to Claude Code in Cursor one phase at a time. 
 
 ---
 

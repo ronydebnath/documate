@@ -42,3 +42,4 @@ backend/evals/reports/
 .vercel
 .env*.local
 docs/portfolio.md
+.plans/build_plan.md
