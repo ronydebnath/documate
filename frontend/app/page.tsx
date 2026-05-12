@@ -117,7 +117,25 @@ export default function ChatPage() {
         citation={drawer}
         onClose={() => setDrawer(null)}
       />
+
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-zinc-200/80 bg-white/60 px-4 py-2 text-center text-[11px] text-zinc-500 sm:px-6">
+      Built by{" "}
+      <a
+        href="https://www.linkedin.com/in/ronydebnath/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-medium text-zinc-700 underline decoration-zinc-200 decoration-2 underline-offset-4 transition hover:text-zinc-900 hover:decoration-zinc-900"
+      >
+        Rony Debnath
+      </a>
+    </footer>
   );
 }
 
